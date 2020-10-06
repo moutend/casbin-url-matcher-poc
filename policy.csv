@@ -1,3 +1,0 @@
-p, member, /v1/api/tenants/:tenant_id/members/:member_id/facilities, GET
-p, admin, /v1/api/tenants/:tenant_id/members/:member_id/facilities, GET
-p, admin, /v1/api/tenants/:tenant_id/members/:member_id/facilities, PUT

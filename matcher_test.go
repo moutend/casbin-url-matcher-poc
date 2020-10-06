@@ -4,12 +4,15 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/casbin/casbin"
+	"github.com/casbin/casbin/v2"
 	"github.com/stretchr/testify/require"
 )
 
 func TestMatchpath(t *testing.T) {
-	enforcer := casbin.NewEnforcer("model.conf", "policy.csv")
+	enforcer := &casbin.Enforcer{}
+
+	require.NoError(t, enforcer.InitWithModelAndAdapter(DefaultModel, DefaultAdapter))
+
 	enforcer.AddFunction("match_path", MatchPath)
 
 	tests := []struct {
@@ -58,6 +61,9 @@ func TestMatchpath(t *testing.T) {
 	for _, test := range tests {
 		t.Logf("%+v\n", test)
 
-		require.Equal(t, test.isAllowed, enforcer.Enforce(test.role, test.path, test.method))
+		isAllowed, err := enforcer.Enforce(test.role, test.path, test.method)
+
+		require.NoError(t, err)
+		require.Equal(t, test.isAllowed, isAllowed)
 	}
 }
